@@ -1,5 +1,6 @@
 package net.ouacrime.ebankingbackend;
 
+import net.ouacrime.ebankingbackend.dtos.CustomerDTO;
 import net.ouacrime.ebankingbackend.entites.*;
 import net.ouacrime.ebankingbackend.enums.AccountStatus;
 import net.ouacrime.ebankingbackend.enums.OperationType;
@@ -32,7 +33,7 @@ public class EbankingBackendApplication {
         return args -> {
             Stream.of("Hassan","Imane","Mohamed").forEach(
                     name->{
-                        Customer customer= new Customer();
+                        CustomerDTO customer= new CustomerDTO();
                         customer.setEmail(name+"@gmail");
                         customer.setName(name);
                         bankAccountService.saveCustomer(customer);
