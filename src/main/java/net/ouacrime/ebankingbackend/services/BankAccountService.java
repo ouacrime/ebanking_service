@@ -1,9 +1,6 @@
 package net.ouacrime.ebankingbackend.services;
 
-import net.ouacrime.ebankingbackend.dtos.BankAccountDTO;
-import net.ouacrime.ebankingbackend.dtos.CurrentBankAccountDTO;
-import net.ouacrime.ebankingbackend.dtos.CustomerDTO;
-import net.ouacrime.ebankingbackend.dtos.SavingBankAccountDTO;
+import net.ouacrime.ebankingbackend.dtos.*;
 import net.ouacrime.ebankingbackend.entites.BankAccount;
 import net.ouacrime.ebankingbackend.entites.CurrentAccount;
 import net.ouacrime.ebankingbackend.entites.Customer;
@@ -33,4 +30,6 @@ public interface BankAccountService {
     List<BankAccountDTO> bankAccountList();
 
     CustomerDTO getCutomer(Long cutomerId) throws CustomerNotFoundException;
+
+    List<AccountOperationDTO> accountHistory(String accountId);
 }

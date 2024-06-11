@@ -1,6 +1,9 @@
 package net.ouacrime.ebankingbackend;
 
+import net.ouacrime.ebankingbackend.dtos.BankAccountDTO;
+import net.ouacrime.ebankingbackend.dtos.CurrentBankAccountDTO;
 import net.ouacrime.ebankingbackend.dtos.CustomerDTO;
+import net.ouacrime.ebankingbackend.dtos.SavingBankAccountDTO;
 import net.ouacrime.ebankingbackend.entites.*;
 import net.ouacrime.ebankingbackend.enums.AccountStatus;
 import net.ouacrime.ebankingbackend.enums.OperationType;
@@ -27,7 +30,6 @@ public class EbankingBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(EbankingBackendApplication.class, args);
     }
-
     @Bean
     CommandLineRunner commandLineRunner(BankAccountService bankAccountService){
         return args -> {
@@ -43,26 +45,30 @@ public class EbankingBackendApplication {
                         try{
                             bankAccountService.saveCurrentBankAccount(Math.random()*90000,9000,customer.getId());
                             bankAccountService.saveSavingBankAccount(Math.random()*120000,5.5,customer.getId());
-                            List<BankAccount> bankAccounts = bankAccountService.bankAccountList();
-                            for (BankAccount bankAccount:bankAccounts){
-                                for (int i = 0; i<10;i++){
-                                    bankAccountService.credit(bankAccount.getId(),10000+Math.random()*12000,"Credit");
-                                }
-                                for (int i = 0; i<10;i++){
-                                    bankAccountService.credit(bankAccount.getId(),10000+Math.random()*12000,"Credit");
-                                    bankAccountService.debit(bankAccount.getId(),1000+Math.random()*9000,"Debit");
 
-                                }
-                            }
                         }
                         catch (CustomerNotFoundException e){
                             e.printStackTrace();
                         }
-                        catch (BankAccountNotFoundException | BalanceNotSufficientException e){
-                            e.printStackTrace();
-                        }
+
+                    });
+            List<BankAccountDTO> bankAccounts = bankAccountService.bankAccountList();
+            for (BankAccountDTO bankAccount:bankAccounts){
+                for (int i = 0; i<10;i++){
+                    String accoutnId;
+                    if (bankAccount instanceof SavingBankAccountDTO)
+                    {
+                        accoutnId = ((SavingBankAccountDTO) bankAccount).getId();
+                        System.out.println("Saving = "+ accoutnId);
+                    }else
+                    {
+                        accoutnId = ((CurrentBankAccountDTO) bankAccount).getId();
+                        System.out.println("current = "+ accoutnId);
                     }
-            );
+                    bankAccountService.credit(accoutnId,10000+Math.random()*12000,"Credit");
+                    bankAccountService.debit(accoutnId,1000+Math.random()*9000,"Debit");
+                }
+            }
         };
     }
 
