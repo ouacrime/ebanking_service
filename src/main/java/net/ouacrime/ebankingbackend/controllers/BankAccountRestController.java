@@ -2,14 +2,12 @@ package net.ouacrime.ebankingbackend.controllers;
 
 
 import lombok.AllArgsConstructor;
+import net.ouacrime.ebankingbackend.dtos.AccountHistoryDTO;
 import net.ouacrime.ebankingbackend.dtos.AccountOperationDTO;
 import net.ouacrime.ebankingbackend.dtos.BankAccountDTO;
 import net.ouacrime.ebankingbackend.exceptions.BankAccountNotFoundException;
 import net.ouacrime.ebankingbackend.services.BankAccountService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +36,13 @@ public class BankAccountRestController {
     public List<AccountOperationDTO> getHistory(@PathVariable String accountId)
     {
         return bankAccountService.accountHistory(accountId);
+    }
+
+    @GetMapping({"/{accountId}/pageOperations"})
+    public AccountHistoryDTO getAccountHistory(@PathVariable String accountId,
+                                               @RequestParam(name = "page",defaultValue = "0") int page,
+                                               @RequestParam(name = "size",defaultValue = "5")   int size) throws BankAccountNotFoundException {
+        return bankAccountService.getAccountHistory(accountId,page,size);
     }
 
 }
